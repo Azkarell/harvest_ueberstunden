@@ -7,7 +7,7 @@ import { ChangeDateRange } from './actions/main.actions';
 import { Observable } from 'rxjs/Observable';
 import { State } from './reducer/main.reducer';
 import { UserService } from '../services/user.service';
-import { getTimeEntries, getDateRange, getTimeEntriesAggregatedByDay, getOverworkInfo, getOverworkTotal } from './selectors/main.selectors';
+import { getTimeEntries, getDateRange, getTimeEntriesAggregatedByDay, getOverworkInfoByDay, getOverworkTotal, getOverworkInfoByWeek } from './selectors/main.selectors';
 
 @Component({
   selector: 'app-main',
@@ -27,7 +27,7 @@ export class MainComponent {
   }
 
   async ngOnInit() {
-    this.time_entries = this.store.select(getOverworkInfo);
+    this.time_entries = this.store.select(getOverworkInfoByWeek);
     this.date_range = this.store.select(getDateRange);
     this.overwork = this.store.select(getOverworkTotal);
   }

@@ -16,18 +16,15 @@ import { TimeEffects } from "./main/effects/main.effects";
 import { UserService } from './services/user.service';
 import { HolidayService } from './services/holiday.service';
 import { HarvestService } from './services/harvest.service';
+import { MainComponent } from './main/main.component';
+import { MainModule } from './main/main.module';
 
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: './main/main.module#MainModule',
+    path: '',
+    component: MainComponent,
     canActivate: [AuthGuard]
-  },
-  {
-    path: '**',
-    redirectTo: 'home',
-    pathMatch: 'full'
   }
 ]
 @NgModule({
@@ -37,7 +34,8 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MainModule
   ],
   providers: [
     {

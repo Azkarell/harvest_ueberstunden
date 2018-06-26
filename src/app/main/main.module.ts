@@ -15,16 +15,9 @@ import { logger } from './reducer/meta.reducer';
 import { MainComponent } from './main.component';
 import { HolidayService } from '../services/holiday.service';
 
-const routes : Routes = [
-  {
-    path:'',
-    component: MainComponent
-  }
-]
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
     StoreModule.forRoot(reducers,{metaReducers: [logger]}),
     EffectsModule.forRoot([TimeEffects]),
     StoreDevtoolsModule.instrument({

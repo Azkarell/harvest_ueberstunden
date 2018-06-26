@@ -4,7 +4,8 @@ import * as moment from 'moment';
 import { Moment } from "moment";
 
 export interface OverWorkInfo {
-    time: Date,
+    time: Moment,
+    timeString: string,
     hours: number,
     quota: number
 } 
@@ -65,6 +66,5 @@ export class TimeEntries {
         this.per_page = per_page;
         this.is_running = is_running;
         this.time_entries = [];
-
     }
 }

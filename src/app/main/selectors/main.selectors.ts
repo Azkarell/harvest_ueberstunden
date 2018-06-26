@@ -35,15 +35,24 @@ export const getWorkingDaysRange = createSelector([getDateRange, getHolidays], (
 export const getTimeEntriesAggregatedByDay = createSelector([getTimeEntries],
     (time_entries) => group(time_entries, x => x.spent_date.format('YYYY-MM-DD')));
 
-export const getOverworkInfo: MemoizedSelector<State, OverWorkInfo[]> = createSelector([getTimeEntriesAggregatedByDay, getWorkingDaysRange],(entries, days) => {
+export const getOverworkInfoByDay: MemoizedSelector<State, OverWorkInfo[]> = createSelector([getTimeEntriesAggregatedByDay, getWorkingDaysRange],(entries, days) => {
     return Object.keys(days).map(dateStr => ({
-        time: moment(dateStr).toDate(),
+        time: moment(dateStr),
+        timeString: moment(dateStr).format('ddd'),
         quota: days[dateStr],
         hours: (entries[dateStr] || []).reduce((p,c)=> p += c.hours, 0)
-    }))
+    }));
 })
 
-export const getOverworkTotal = createSelector([getOverworkInfo], (entries) => entries.reduce<number>((p,c) => p += (c.hours - c.quota), 0));
+export const getOverworkInfoByWeek: MemoizedSelector<State, OverWorkInfo[]> = createSelector([getOverworkInfoByDay], ow => 
+    groupMap(ow, x => x.time.week().toString(), (k, g) => (<OverWorkInfo>{
+        hours: g.reduce((p,c) => p+c.hours, 0),
+        quota: g.reduce((p,c) => p+c.quota, 0),
+        time: g[0].time,
+        timeString: 'KW ' + k
+    })));
+
+export const getOverworkTotal = createSelector([getOverworkInfoByDay], (entries) => entries.reduce<number>((p,c) => p += (c.hours - c.quota), 0));
   
 function group<T>(list: T[],  keySelector: (x: T) => string | number){
     return list.reduce<{[key:string]: T[]}>((p,c) => {

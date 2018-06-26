@@ -12,7 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    if(req.url.startsWith('https://api.harvestapp.com')){
+    if(req.url.startsWith('https://id.getharvest.com') || req.url.startsWith('https://api.harvestapp.com')){
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${this.user.token}`

@@ -25,15 +25,15 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Datum</th>
+                <th>Kalenderwoche</th>
                 <th>Stunden</th>
-                <th>Quota</th>
+                <th>Regelarbeitszeit</th>
                 <th>Differenz</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let entry of time_entries | async">
-                <td>{{entry.time | date}}</td>
+                <td>{{entry.timeString}}</td>
                 <td>{{entry.hours | number}}</td>
                 <td>{{entry.quota | number}}</td>
                 <td>{{(entry.hours - entry.quota) | number}}</td>
