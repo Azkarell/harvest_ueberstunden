@@ -4,7 +4,7 @@ import { User, UserInfo } from '../models/user.model';
 import { TimeEntries, TimeEntryDto, TimeEntry, OverWorkInfo } from '../models/time.model';
 import { Store } from '@ngrx/store';
 import { ChangeDateRange } from './actions/main.actions';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { State } from './reducer/main.reducer';
 import { UserService } from '../services/user.service';
 import { getTimeEntries, getDateRange, getTimeEntriesAggregatedByDay, getOverworkInfoByDay, getOverworkTotal, getOverworkInfoByWeek } from './selectors/main.selectors';

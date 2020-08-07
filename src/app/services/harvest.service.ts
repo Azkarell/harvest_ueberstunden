@@ -1,10 +1,13 @@
+
+import {forkJoin as observableForkJoin,  Observable } from 'rxjs';
+
+import {map, tap, mergeMap} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { HttpClient, HttpRequest, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { TimeEntries, TimeEntryDto, TimeEntry } from '../models/time.model';
 import 'rxjs/Rx';
-import { Observable } from 'rxjs/Rx';
 import { UserService } from './user.service';
 import * as moment from 'moment';
 import { range } from '../helpers';
@@ -33,8 +36,8 @@ export class HarvestService {
           from: from,
           to: to
         }
-      })
-      .flatMap(res =>  Observable.forkJoin(range(1, res.total_pages)
+      }).pipe(
+      mergeMap(res =>  observableForkJoin(range(1, res.total_pages)
         .map(x => this.http.get<TimeEntries>(this.baseurl + this.timeurl, {
           headers: headers, 
           params: {
@@ -43,9 +46,9 @@ export class HarvestService {
             page: x.toString()
           }
         }))  
-      ))
-      .do(x => console.log(x))
-      .map(x => x.reduce<TimeEntryDto[]>( (p,c) => [ ...p, ...c.time_entries ], [])
-        .map(y => new TimeEntry(y)));
+      )),
+      tap(x => console.log(x)),
+      map(x => x.reduce<TimeEntryDto[]>( (p,c) => [ ...p, ...c.time_entries ], [])
+        .map(y => new TimeEntry(y))),);
   }
 }
