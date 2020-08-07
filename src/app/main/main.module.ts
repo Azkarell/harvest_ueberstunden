@@ -1,31 +1,31 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Routes, RouterModule } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
 
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
-import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from "ngx-bootstrap";
 
-import { HarvestService } from '../services/harvest.service';
-import { TimeEntriesReducer, reducers } from './reducer/main.reducer';
-import { TimeEffects } from './effects/main.effects';
-import { logger } from './reducer/meta.reducer';
-import { MainComponent } from './main.component';
-import { HolidayService } from '../services/holiday.service';
+import { HarvestService } from "../services/harvest.service";
+import { TimeEntriesReducer, reducers } from "./reducer/main.reducer";
+import { TimeEffects } from "./effects/main.effects";
+import { logger } from "./reducer/meta.reducer";
+import { MainComponent } from "./main.component";
+import { HolidayService } from "../services/holiday.service";
 
 @NgModule({
   imports: [
     CommonModule,
-    StoreModule.forRoot(reducers,{metaReducers: [logger]}),
+    StoreModule.forRoot(reducers, { metaReducers: [logger] }),
     EffectsModule.forRoot([TimeEffects]),
     StoreDevtoolsModule.instrument({
-      maxAge: 25
+      maxAge: 25,
     }),
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
   ],
   declarations: [MainComponent],
-  providers: [HarvestService, HolidayService]
+  providers: [HarvestService, HolidayService],
 })
-export class MainModule { }
+export class MainModule {}
