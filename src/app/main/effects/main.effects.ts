@@ -1,33 +1,43 @@
+import { of as observableOf, Observable } from "rxjs";
 
-import {of as observableOf,  Observable } from 'rxjs';
-
-import {catchError, map, switchMap,  catchError } from 'rxjs/operators';
+import { map, switchMap, catchError } from "rxjs/operators";
 import { Injectable } from "@angular/core";
-import { Effect, Actions } from "@ngrx/effects";
+import { Effect, Actions, ofType } from "@ngrx/effects";
 import { Action } from "@ngrx/store";
 
-import * as timeEntryAction from '../actions/main.actions';
+import * as timeEntryAction from "../actions/main.actions";
 import { HarvestService } from "../../services/harvest.service";
 import { HolidayService } from "../../services/holiday.service";
 
 @Injectable()
 export class TimeEffects {
+  @Effect()
+  updateEntries: Observable<Action> = this.actions.pipe(
+    ofType(timeEntryAction.CHANGE_DATE_RANGE),
+    switchMap((a: timeEntryAction.ChangeDateRange) =>
+      this.harvestService.getTimeEntries(a.value[0], a.value[1]).pipe(
+        map((val) => new timeEntryAction.GetTimeEntriesSuccess(val)),
+        catchError((err) =>
+          observableOf(new timeEntryAction.GetTimeEntriesError())
+        )
+      )
+    )
+  );
 
-    @Effect()
-    updateEntries: Observable<Action> = this.actions
-        .ofType(timeEntryAction.CHANGE_DATE_RANGE).pipe(
-        switchMap((a: timeEntryAction.ChangeDateRange) => this.harvestService.getTimeEntries(a.value[0], a.value[1]).pipe(
-            map(val => new timeEntryAction.GetTimeEntriesSuccess(val)),
-            catchError(err => observableOf(new timeEntryAction.GetTimeEntriesError())),)));
+  @Effect()
+  updateHolidays: Observable<Action> = this.actions.pipe(
+    ofType(timeEntryAction.CHANGE_DATE_RANGE),
+    switchMap((a: timeEntryAction.ChangeDateRange) =>
+      this.holidayService
+        .getHolidaysInRange(a.value[0], a.value[1])
+        .map((t) => new timeEntryAction.GetHolidaysSuccess(t))
+        .catch((err) => observableOf(new timeEntryAction.GetHolidaysError()))
+    )
+  );
 
-    @Effect()
-    updateHolidays: Observable<Action> = this.actions
-        .ofType(timeEntryAction.CHANGE_DATE_RANGE).pipe(
-        switchMap((a: timeEntryAction.ChangeDateRange) => this.holidayService.getHolidaysInRange(a.value[0], a.value[1])
-            .map(t => new timeEntryAction.GetHolidaysSuccess(t))
-            .catch(err => observableOf(new timeEntryAction.GetHolidaysError))));
-    
-    constructor(private harvestService: HarvestService, 
-        private holidayService: HolidayService, 
-        private actions: Actions){}
+  constructor(
+    private harvestService: HarvestService,
+    private holidayService: HolidayService,
+    private actions: Actions
+  ) {}
 }

@@ -1,44 +1,61 @@
-<nav class="container navbar navbar-light navbar-expand-lg justify-content-between">
-    <a class="navbar-brand text-primary h1 mb-0" routerLink="/">Harvest Überstunden</a>
-    <ul *ngIf="user.email" class="navbar-nav">
-        <span style="margin-right: 5px;">Logged in as</span>
-        <strong>{{user.email}}</strong>&nbsp;-&nbsp;
-        <a href="#" (click)="logOut($event)">LogOut</a>
-    </ul>
+<nav
+  class="container navbar navbar-light navbar-expand-lg justify-content-between"
+>
+  <a class="navbar-brand text-primary h1 mb-0" routerLink="/"
+    >Harvest Überstunden</a
+  >
+  <ul *ngIf="user.email" class="navbar-nav">
+    <span style="margin-right: 5px;">Logged in as</span>
+    <strong>{{ user.email }}</strong
+    >&nbsp;-&nbsp;
+    <a href="#" (click)="logOut($event)">LogOut</a>
+  </ul>
 </nav>
 <div class="container">
-    <div>
-        <div class="col-md-4 form-group float-left">
-            <strong>Zeitraum:</strong>
-            <input bsDaterangepicker 
-                placeholder="Zeitspanne" 
-                class="form-control"
-                [bsValue]="date_range | async"
-                [bsConfig]="{ containerClass: 'theme-blue' }" 
-                (bsValueChange)="onRangeChange($event)">
-        </div>
-        <div class="col-md-6 float-right form-group" style="text-align: right">
-            <strong>Überstunden im Zeitraum</strong>
-            <p class="lead" style="padding: 0.5em;">{{ overwork | async | number }} h</p>
-        </div>
+  <div>
+    <div class="col-md-4 form-group float-left">
+      <strong>Zeitraum:</strong>
+      <input
+        bsDaterangepicker
+        placeholder="Zeitspanne"
+        class="form-control"
+        [bsValue]="date_range | async"
+        [bsConfig]="{ containerClass: 'theme-blue' }"
+        (bsValueChange)="onRangeChange($event)"
+      />
     </div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Kalenderwoche</th>
-                <th>Stunden</th>
-                <th>Regelarbeitszeit</th>
-                <th>Differenz</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let entry of time_entries | async">
-                <td>{{entry.timeString}}</td>
-                <td>{{entry.hours | number}}</td>
-                <td>{{entry.quota | number}}</td>
-                <td>{{(entry.hours - entry.quota) | number}}</td>
-            </tr>
-        </tbody>
-    </table>
-
+    <div class="col-md-3 float-left form-group">
+      <strong>Tägliche Arbeitszeit:</strong>
+      <input
+        type="number"
+        placeholder="Tägliche Arbeitszeit"
+        class="form-control"
+        [(ngModel)]="daily"
+      />
+    </div>
+    <div class="col-md-6 float-right form-group" style="text-align: right;">
+      <strong>Überstunden im Zeitraum</strong>
+      <p class="lead" style="padding: 0.5em;">
+        {{ overwork | async | number }} h
+      </p>
+    </div>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Kalenderwoche</th>
+        <th>Stunden</th>
+        <th>Regelarbeitszeit</th>
+        <th>Differenz</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entry of time_entries | async">
+        <td>{{ entry.timeString }}</td>
+        <td>{{ entry.hours | number }}</td>
+        <td>{{ entry.quota | number }}</td>
+        <td>{{ entry.hours - entry.quota | number }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

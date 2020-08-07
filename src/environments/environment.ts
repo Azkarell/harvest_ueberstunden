@@ -5,10 +5,10 @@
 
 export const environment = {
   production: false,
-  authority: 'https://id.getharvest.com',
-  clientId: 'UQ8SJ45lQcQmPd3a7q91nnq_',
-  scope: 'harvest:all',
-  redirectUri: 'http://localhost:4200#', 
+  authority: "https://id.getharvest.com",
+  clientId: "UQ8SJ45lQcQmPd3a7q91nnq_",
+  scope: "harvest:all",
+  redirectUri: "http://localhost:4200#",
   requireHttps: false,
-  authorizeEndpoint: "https://id.getharvest.com/oauth2/authorize"
+  authorizeEndpoint: "https://id.getharvest.com/oauth2/authorize",
 };
