@@ -2,7 +2,11 @@ import { Component } from "@angular/core";
 import { User } from "../models/user.model";
 import { OverWorkInfo } from "../models/time.model";
 import { Store } from "@ngrx/store";
-import { ChangeDateRange, changeDaily } from "./actions/main.actions";
+import {
+  ChangeDateRange,
+  changeDaily,
+  changeIgnoreHolidays,
+} from "./actions/main.actions";
 import { Observable } from "rxjs";
 import { State } from "./reducer/main.reducer";
 import { UserService } from "../services/user.service";
@@ -23,6 +27,17 @@ export class MainComponent {
   date_range: Observable<[Date, Date]>;
 
   user: User;
+
+  private _ignoreHolidays = false;
+  public get ignoreHolidays() {
+    return this._ignoreHolidays;
+  }
+
+  public set ignoreHolidays(val: boolean) {
+    this._ignoreHolidays = val;
+    this.store.dispatch(changeIgnoreHolidays({ val: val }));
+  }
+
   private _daily = 7;
   public get daily() {
     return this._daily;

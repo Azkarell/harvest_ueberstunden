@@ -1,5 +1,5 @@
 import { createSelector, MemoizedSelector } from "@ngrx/store";
-import { State } from "../reducer/main.reducer";
+import { ignoreHolidaysReducer, State } from "../reducer/main.reducer";
 import { TimeEntry, OverWorkInfo } from "../../models/time.model";
 import * as moment from "moment";
 import { Moment } from "moment";
@@ -14,9 +14,11 @@ export const getTimeEntries = createSelector([getTimeDtos], (dtos) =>
 
 export const getDaily = (state: State) => state.daily;
 
+export const getIgnoreHolidays = (state: State) => state.ignoreHolidays;
+
 export const getWorkingDaysRange = createSelector(
-  [getDateRange, getHolidays, getDaily],
-  (r, h, d) => {
+  [getDateRange, getHolidays, getDaily, getIgnoreHolidays],
+  (r, h, d, ignoreHolidays) => {
     const today = moment();
     let current = moment(r[0]);
     let endValue = moment(r[1]);
@@ -24,14 +26,13 @@ export const getWorkingDaysRange = createSelector(
     endValue.add(1, "days");
 
     console.log(current, endValue);
-
+    console.log(ignoreHolidays);
     const dates: { [data: string]: number } = {};
-
     while (!current.isSame(endValue, "day")) {
       dates[current.format("YYYY-MM-DD")] =
         current.day() === 0 ||
         current.day() === 6 ||
-        h.find((x) => x.isSame(current, "day"))
+        (!ignoreHolidays && h.find((x) => x.isSame(current, "day")))
           ? 0
           : d;
 
@@ -74,7 +75,18 @@ export const getOverworkInfoByWeek: MemoizedSelector<
         hours: g.reduce((p, c) => p + c.hours, 0),
         quota: g.reduce((p, c) => p + c.quota, 0),
         time: g[0].time,
-        timeString: "KW " + k,
+        timeString:
+          "KW " +
+          k +
+          " " +
+          moment()
+            .isoWeek(+k)
+            .startOf("week")
+            .toString() +
+          moment()
+            .isoWeek(+k)
+            .endOf("week")
+            .toString(),
       }
   )
 );

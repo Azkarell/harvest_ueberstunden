@@ -33,6 +33,10 @@
         [(ngModel)]="daily"
       />
     </div>
+    <div class="col-md-3 float-left form-group">
+      <strong>Ignoriere Feiertage</strong>
+      <input type="checkbox" placeholder="Ignoriere Feiertage" class="form-control" [(ngModel)]="ignoreHolidays" />
+    </div>
     <div class="col-md-6 float-right form-group" style="text-align: right;">
       <strong>Überstunden im Zeitraum</strong>
       <p class="lead" style="padding: 0.5em;">

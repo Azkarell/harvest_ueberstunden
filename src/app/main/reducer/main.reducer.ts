@@ -9,6 +9,7 @@ export interface State {
   holidays: Moment[];
   date_range: [Date, Date];
   daily: number;
+  ignoreHolidays: boolean;
 }
 
 const intialDateRange = [new Date("2018-03-01"), new Date()];
@@ -16,6 +17,11 @@ const intialDateRange = [new Date("2018-03-01"), new Date()];
 export const dailyReducer = createReducer(
   7,
   on(TimeEntriesAction.changeDaily, (state, prop) => prop.val)
+);
+
+export const ignoreHolidaysReducer = createReducer(
+  false,
+  on(TimeEntriesAction.changeIgnoreHolidays, (state, prop) => prop.val)
 );
 
 export function TimeEntriesReducer(
@@ -70,4 +76,5 @@ export const reducers = {
   date_range: DateRangeReducer,
   holidays: HolidaysReducer,
   daily: dailyReducer,
+  ignoreHolidays: ignoreHolidaysReducer,
 };
