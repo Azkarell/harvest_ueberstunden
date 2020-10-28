@@ -3,6 +3,7 @@ import { ignoreHolidaysReducer, State } from "../reducer/main.reducer";
 import { TimeEntry, OverWorkInfo } from "../../models/time.model";
 import * as moment from "moment";
 import { Moment } from "moment";
+import { flatten } from "@angular/compiler";
 
 export const getTimeDtos = (state: State) => state.time_entries;
 export const getHolidays = (state: State) => state.holidays;
@@ -18,23 +19,23 @@ export const getIgnoreHolidays = (state: State) => state.ignoreHolidays;
 
 export const getWorkingDaysRange = createSelector(
   [getDateRange, getHolidays, getDaily, getIgnoreHolidays],
-  (r, h, d, ignoreHolidays) => {
+  (dateRange, holidays, dailyWorkTime, ignoreHolidays) => {
     const today = moment();
-    let current = moment(r[0]);
-    let endValue = moment(r[1]);
+    let current = moment(dateRange[0]);
+    let endValue = moment(dateRange[1]);
     endValue = endValue.isAfter(today) ? today : endValue;
     endValue.add(1, "days");
 
     console.log(current, endValue);
-    console.log(ignoreHolidays);
+
     const dates: { [data: string]: number } = {};
     while (!current.isSame(endValue, "day")) {
       dates[current.format("YYYY-MM-DD")] =
         current.day() === 0 ||
         current.day() === 6 ||
-        (!ignoreHolidays && h.find((x) => x.isSame(current, "day")))
+        (!ignoreHolidays && holidays.find((x) => x.isSame(current, "day")))
           ? 0
-          : d;
+          : dailyWorkTime;
 
       current = moment(current.add(1, "days"));
     }
@@ -59,6 +60,18 @@ export const getOverworkInfoByDay: MemoizedSelector<
       timeString: moment(dateStr).format("ddd"),
       quota: days[dateStr],
       hours: (entries[dateStr] || []).reduce((p, c) => (p += c.hours), 0),
+      numberOfVacationEntries: (entries[dateStr] || []).filter((x) => {
+        const containsurlaub =
+          x.notes?.toLowerCase().includes("urlaub") ?? false;
+        const containsvacation =
+          x.notes?.toLowerCase().includes("vacation") ?? false;
+        console.log(
+          containsvacation,
+          containsurlaub,
+          containsurlaub || containsvacation
+        );
+        return containsurlaub || containsvacation;
+      }).length,
     }));
   }
 );
@@ -87,6 +100,10 @@ export const getOverworkInfoByWeek: MemoizedSelector<
             .isoWeek(+k)
             .endOf("week")
             .toString(),
+        numberOfVacationEntries: g.reduce(
+          (p, c) => p + c.numberOfVacationEntries,
+          0
+        ),
       }
   )
 );
