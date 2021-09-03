@@ -25,8 +25,7 @@ export const getWorkingDaysRange = createSelector(
     let endValue = moment(dateRange[1]);
     endValue = endValue.isAfter(today) ? today : endValue;
     endValue.add(1, "days");
-
-    console.log(current, endValue);
+    console.log("ignoreHoliday "+ ignoreHolidays);
 
     const dates: { [data: string]: number } = {};
     while (!current.isSame(endValue, "day")) {
@@ -65,11 +64,6 @@ export const getOverworkInfoByDay: MemoizedSelector<
           x.notes?.toLowerCase().includes("urlaub") ?? false;
         const containsvacation =
           x.notes?.toLowerCase().includes("vacation") ?? false;
-        console.log(
-          containsvacation,
-          containsurlaub,
-          containsurlaub || containsvacation
-        );
         return containsurlaub || containsvacation;
       }).length,
     }));

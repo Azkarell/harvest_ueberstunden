@@ -30,8 +30,7 @@ export class TimeEffects {
     switchMap((a: timeEntryAction.ChangeDateRange) =>
       this.holidayService
         .getHolidaysInRange(a.value[0], a.value[1])
-        .map((t) => new timeEntryAction.GetHolidaysSuccess(t))
-        .catch((err) => observableOf(new timeEntryAction.GetHolidaysError()))
+        .pipe(map((t) => new timeEntryAction.GetHolidaysSuccess(t)), catchError(err => observableOf(new timeEntryAction.GetHolidaysError())))
     )
   );
 
