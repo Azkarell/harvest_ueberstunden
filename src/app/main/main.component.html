@@ -52,6 +52,7 @@
         <th>Regelarbeitszeit</th>
         <th>Differenz</th>
         <th>Urlaub notiz</th>
+        <th>Feiertage</th>
       </tr>
     </thead>
     <tbody>
@@ -61,6 +62,7 @@
         <td>{{ entry.quota | number }}</td>
         <td>{{ entry.hours - entry.quota | number }}</td>
         <td>{{ entry.numberOfVacationEntries | number}}</td>
+        <td>{{ entry.holidays | number }}</td>
       </tr>
     </tbody>
   </table>

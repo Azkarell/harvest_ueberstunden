@@ -52,8 +52,8 @@ export const getOverworkInfoByDay: MemoizedSelector<
   State,
   OverWorkInfo[]
 > = createSelector(
-  [getTimeEntriesAggregatedByDay, getWorkingDaysRange],
-  (entries, days) => {
+  [getTimeEntriesAggregatedByDay, getWorkingDaysRange, getHolidays],
+  (entries, days, holidays) => {
     return Object.keys(days).map((dateStr) => ({
       time: moment(dateStr),
       timeString: moment(dateStr).format("ddd"),
@@ -66,6 +66,12 @@ export const getOverworkInfoByDay: MemoizedSelector<
           x.notes?.toLowerCase().includes("vacation") ?? false;
         return containsurlaub || containsvacation;
       }).length,
+      holidays: holidays.reduce<number>((prev, cur) => {
+        if( moment(dateStr).isSame(cur, "day")){
+          return prev + 1;
+        }
+        return prev;
+      }, 0)
     }));
   }
 );
@@ -98,6 +104,7 @@ export const getOverworkInfoByWeek: MemoizedSelector<
           (p, c) => p + c.numberOfVacationEntries,
           0
         ),
+        holidays: g.reduce((p,c) => p + c.holidays, 0)
       }
   )
 );

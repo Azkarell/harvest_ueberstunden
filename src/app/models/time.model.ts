@@ -9,6 +9,7 @@ export interface OverWorkInfo {
   hours: number;
   quota: number;
   numberOfVacationEntries: number;
+  holidays: number;
 }
 
 export interface OverWorkWeek {
