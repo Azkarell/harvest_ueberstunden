@@ -14,6 +14,8 @@ export interface State {
 
 const intialDateRange = [new Date("2018-03-01"), new Date()];
 
+
+
 export const dailyReducer = createReducer(
   7,
   on(TimeEntriesAction.changeDaily, (state, prop) => prop.val)
