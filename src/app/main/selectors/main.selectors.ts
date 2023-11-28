@@ -1,15 +1,14 @@
-import { createSelector, MemoizedSelector } from "@ngrx/store";
+import { createSelector, MemoizedSelector, Selector } from "@ngrx/store";
 import { ignoreHolidaysReducer, State } from "../reducer/main.reducer";
 import { TimeEntry, OverWorkInfo } from "../../models/time.model";
 import * as moment from "moment";
 import { Moment } from "moment";
-import { flatten } from "@angular/compiler";
 
 export const getTimeDtos = (state: State) => state.time_entries;
 export const getHolidays = (state: State) => state.holidays;
 export const getDateRange = (state: State) => state.date_range;
 
-export const getTimeEntries = createSelector([getTimeDtos], (dtos) =>
+export const getTimeEntries = createSelector(getTimeDtos, (dtos) =>
   dtos.map((dto) => new TimeEntry(dto))
 );
 
@@ -18,7 +17,7 @@ export const getDaily = (state: State) => state.daily;
 export const getIgnoreHolidays = (state: State) => state.ignoreHolidays;
 
 export const getWorkingDaysRange = createSelector(
-  [getDateRange, getHolidays, getDaily, getIgnoreHolidays],
+  getDateRange, getHolidays, getDaily, getIgnoreHolidays,
   (dateRange, holidays, dailyWorkTime, ignoreHolidays) => {
     const today = moment();
     let current = moment(dateRange[0]);
@@ -52,7 +51,7 @@ export const getOverworkInfoByDay: MemoizedSelector<
   State,
   OverWorkInfo[]
 > = createSelector(
-  [getTimeEntriesAggregatedByDay, getWorkingDaysRange, getHolidays],
+  getTimeEntriesAggregatedByDay, getWorkingDaysRange, getHolidays,
   (entries, days, holidays) => {
     return Object.keys(days).map((dateStr) => ({
       time: moment(dateStr),

@@ -130,7 +130,6 @@
       }
     }
   },
-  "defaultProject": "harvestapp",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

@@ -24,6 +24,7 @@ export const changeIgnoreHolidays = createAction(
   props<{ val: boolean }>()
 );
 
+
 export class GetTimeEntriesError implements Action {
   type = GET_TIME_ENTRIES_ERROR;
 }
