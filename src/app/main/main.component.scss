@@ -1,6 +1,6 @@
 // import bootstrap scss
-@import "~bootstrap/scss/bootstrap";
-@import '~bootstrap/scss/functions', '~bootstrap/scss/_variables.scss';
+@import "node_modules/bootstrap/scss/bootstrap";
+@import 'node_modules/bootstrap/scss/functions', 'node_modules/bootstrap/scss/_variables.scss';
 
 .navbar {
     margin-bottom: 50px;
@@ -23,6 +23,6 @@
     flex-wrap: wrap;
 }
 
-@import '~ngx-bootstrap/datepicker/utils/scss/variables';
-@import '~ngx-bootstrap/datepicker/utils/scss/mixins';
+@import 'node_modules/ngx-bootstrap/datepicker/utils/scss/variables';
+@import 'node_modules/ngx-bootstrap/datepicker/utils/scss/mixins';
 

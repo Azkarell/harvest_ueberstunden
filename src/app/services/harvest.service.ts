@@ -4,7 +4,6 @@ import { map, tap, mergeMap } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { TimeEntries, TimeEntryDto, TimeEntry } from "../models/time.model";
-import "rxjs/Rx";
 import { UserService } from "./user.service";
 import * as moment from "moment";
 import { range } from "../helpers";
@@ -32,8 +31,8 @@ export class HarvestService {
       })
       .pipe(
         mergeMap((res) =>
-          observableForkJoin(
-            range(1, res.total_pages).map((x) =>
+          {
+            let r = range(1, res.total_pages).map((x) =>
               this.http.get<TimeEntries>(this.baseurl + this.timeurl, {
                 headers: headers,
                 params: {
@@ -43,7 +42,8 @@ export class HarvestService {
                 },
               })
             )
-          )
+            return observableForkJoin(r);
+          }
         ),
         tap((x) => console.log(x)),
         map((x) =>
