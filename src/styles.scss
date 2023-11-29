@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~ngx-bootstrap/datepicker/bs-datepicker';
 body {
     font-family: -apple-system, BlinkMacSystemFont,
         “Segoe UI”, “Roboto”, “Oxygen”,
@@ -7,3 +6,9 @@ body {
         “Droid Sans”, “Helvetica Neue”, sans-serif;
 }
 
+
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";

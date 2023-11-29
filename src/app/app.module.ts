@@ -18,6 +18,7 @@ import { HolidayService } from './services/holiday.service';
 import { HarvestService } from './services/harvest.service';
 import { MainComponent } from './main/main.component';
 import { MainModule } from './main/main.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 const routes: Routes = [
@@ -35,7 +36,8 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(routes, {}),
-    MainModule
+    MainModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
